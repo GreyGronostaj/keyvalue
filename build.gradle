@@ -1,0 +1,19 @@
+apply plugin: 'java'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply plugin: 'application'
+mainClassName = 'pl.edu.agh.student.iosr.keyvalue.App'
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': mainClassName
+        )
+    }
+}
+
+repositories {
+    mavenCentral()
+}
