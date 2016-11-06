@@ -9,43 +9,56 @@ import io.atomix.copycat.server.storage.StorageLevel;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Optional;
-import java.util.Random;
 
 public class App {
     public static void main(String[] args) throws UnknownHostException {
-        Optional<InetAddress> ipFromArgs = getIpFromArgs(args);
-        InetAddress ip = ipFromArgs.orElse(InetAddress.getLocalHost());
-        if (ipFromArgs.isPresent()) {
-            System.out.format("Using IP %s", ip);
+        if (args.length == 0) {
+            Address address = getDefaultAddress();
+            System.out.format("Creating cluster at %s:%d\n", address.host(), address.port());
+            createCluster(address);
+        } else if (args[0].toLowerCase().equals("join")) {
+            Address address = new Address(args[1]);
+            System.out.format("Joining cluster at %s:%d\n", address.host(), address.port());
+            joinCluster(address);
         } else {
-            System.out.format("Using default IP %s; provide argument to use custom IP", ip);
-        }
-
-        int port = new Random().nextInt(1000) + 5000;
-        System.out.format("Using random port %d", port);
-
-        Address address = new Address(ip.toString(), port);
-        startServer(address);
-    }
-
-    private static Optional<InetAddress> getIpFromArgs(String[] args) throws UnknownHostException {
-        if (args.length > 1) {
-            return Optional.of(InetAddress.getByName(args[1]));
-        } else {
-            return Optional.empty();
+            Address address = new Address(args[0]);
+            System.out.format("Creating cluster at %s:%d\n", address.host(), address.port());
+            createCluster(address);
         }
     }
 
-    private static void startServer(Address address) {
+    private static void createCluster(Address address) throws UnknownHostException {
+        CopycatServer server = getServer(address);
+        // TODO do something
+    }
+
+    private static void joinCluster(Address address) {
+        CopycatServer server = getServer(address);
+        // TODO do something
+    }
+
+    private static Address getDefaultAddress() throws UnknownHostException {
+        int port = 5000;
+        String ip = InetAddress.getLocalHost().toString();
+        int slashPos = ip.indexOf('/');
+        if (slashPos != -1) {
+            return new Address(ip, port);
+        } else {
+            return new Address(ip.substring(slashPos + 1), port);
+        }
+    }
+
+    private static CopycatServer getServer(Address address) {
         CopycatServer server = CopycatServer.builder(address)
                 .withStateMachine(KeyValueStateMachine::new)
                 .withTransport(NettyTransport.builder().withThreads(2).build())
-                .withStorage(Storage.builder().withDirectory(new File("logs")).withStorageLevel(StorageLevel.DISK).build())
+                .withStorage(Storage.builder()
+                        .withDirectory(new File("logs"))
+                        .withStorageLevel(StorageLevel.DISK)
+                        .build())
                 .build();
         server.serializer().register(PutCommand.class);
         server.serializer().register(GetQuery.class);
-
-        // TODO create a cluster or join it: http://atomix.io/copycat/docs/getting-started/#bootstrapping-the-cluster
+        return server;
     }
 }
