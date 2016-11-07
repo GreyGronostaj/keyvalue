@@ -7,7 +7,6 @@ import io.atomix.copycat.server.storage.Storage;
 import io.atomix.copycat.server.storage.StorageLevel;
 import pl.edu.agh.student.iosr.keyvalue.AddressUtils;
 import pl.edu.agh.student.iosr.keyvalue.GetQuery;
-import pl.edu.agh.student.iosr.keyvalue.KeyValueStateMachine;
 import pl.edu.agh.student.iosr.keyvalue.PutCommand;
 
 import java.io.File;
