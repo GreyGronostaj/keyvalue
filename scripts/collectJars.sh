@@ -2,4 +2,4 @@
 
 mkdir jars
 rm jars/*
-cp runtime/* */runtime/* */build/libs/* jars
+cp runtime/* */runtime/* */build/libs/* jars 2> /dev/null || true
