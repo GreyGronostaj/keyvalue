@@ -16,23 +16,41 @@ import java.util.concurrent.CompletableFuture;
 public class App {
     public static void main(String[] args) throws UnknownHostException {
         if (args.length == 0) {
-            Address address = getDefaultAddress();
-            System.out.format("Creating cluster at %s:%d.\n", address.host(), address.port());
+            printManual();
+            System.exit(1);
+        } else if (args.length == 1) {
+            Address address = parseAddress(args[0]);
             createCluster(address);
-        } else if (args[0].toLowerCase().equals("join")) {
-            Address address = new Address(args[1]);
-            Address clasterAddress;
-            if (args.length < 3) {
-                clasterAddress = new Address("127.0.1.1", 5000);
-            } else {
-                clasterAddress = new Address(args[2]);
-            }
-            System.out.format("Joining cluster at %s:%d.\n", clasterAddress.host(), clasterAddress.port());
-            joinCluster(address, clasterAddress);
+        } else if (args.length == 2) {
+            Address serverAddress = parseAddress(args[0]);
+            Address clusterAddress = parseAddress(args[1]);
+            joinCluster(serverAddress, clusterAddress);
         } else {
-            Address address = new Address(args[0]);
-            System.out.format("Creating cluster at %s:%d.\n", address.host(), address.port());
-            createCluster(address);
+            printManual();
+        }
+    }
+
+    private static void printManual() {
+        System.out.println("Usage:");
+        System.out.println("  Create cluster:   <program> ip:port");
+        System.out.println("  Join cluster:     <program> ip:port clusterIp:clusterPort");
+        System.out.println("IP can always be skipped (eg. ':5000' instead of '127.0.0.1:5000')");
+    }
+
+    private static String getDefaultIP()  {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Address parseAddress(String str) {
+        if (str.charAt(0) == ':') {
+            int port = Integer.valueOf(str.substring(1));
+            return new Address(getDefaultIP(), port);
+        } else {
+            return new Address(str);
         }
     }
 
@@ -50,16 +68,10 @@ public class App {
         });
     }
 
-    private static void joinCluster(Address address, Address clasterAddress) {
-        CopycatServer server = getServer(address);
-        Collection<Address> cluster = Collections.singleton(clasterAddress);
+    private static void joinCluster(Address serverAddress, Address clusterAddress) {
+        CopycatServer server = getServer(serverAddress);
+        Collection<Address> cluster = Collections.singleton(clusterAddress);
         server.join(cluster).join();
-    }
-
-    private static Address getDefaultAddress() throws UnknownHostException {
-        String localHostAddress = InetAddress.getLocalHost().getHostAddress();
-        int port = 5000;
-        return new Address(localHostAddress, port);
     }
 
     private static CopycatServer getServer(Address address) {
