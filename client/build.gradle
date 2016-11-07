@@ -1,0 +1,16 @@
+apply plugin: 'application'
+mainClassName = 'pl.edu.agh.student.iosr.keyvalue.Client'
+
+dependencies {
+    compile project(':common')
+    compile 'io.atomix.copycat:copycat-client:1.1.4'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': mainClassName
+        )
+    }
+}
