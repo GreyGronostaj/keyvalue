@@ -55,6 +55,7 @@ public class Client {
         CompletableFuture<Object> future = client.submit(get);
         Object result = future.join();
         System.out.println(result);
+        System.exit(0);
     }
 
     private static void performPut(CopycatClient client, String key, String value) {
@@ -63,6 +64,7 @@ public class Client {
         CompletableFuture<Object> future = client.submit(get);
         Object result = future.join();
         System.out.println(result);
+        System.exit(0);
     }
 
     private static void printManual() {

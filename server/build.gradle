@@ -1,5 +1,5 @@
 apply plugin: 'application'
-mainClassName = 'pl.edu.agh.student.iosr.keyvalue.Server'
+mainClassName = 'pl.edu.agh.student.iosr.keyvalue.server.Server'
 
 dependencies {
     compile project(':common')

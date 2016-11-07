@@ -11,6 +11,11 @@ allprojects {
         compile 'io.atomix.catalyst:catalyst-netty:1.1.1'
         compile 'org.slf4j:slf4j-simple:1.7.21'
     }
+
+    task getDeps(type: Copy) {
+        from sourceSets.main.runtimeClasspath
+        into 'runtime/'
+    }
 }
 
 jar {
