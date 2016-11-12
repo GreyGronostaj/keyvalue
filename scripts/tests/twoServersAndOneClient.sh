@@ -8,7 +8,7 @@ echo PID: $FirstServerPID.
 SecondServerPID=$(./scripts/runServer.sh 127.0.0.1:10001 127.0.0.1:10000)
 echo PID: $SecondServerPID.
 
-sleep 2
+sleep 4
 
 ./scripts/runClient.sh 127.0.0.1:10000 put A 1
 
