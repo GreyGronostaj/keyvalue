@@ -10,5 +10,3 @@ script:
   - scripts/collectJars.sh
   - scripts/tests/twoServersAndOneClient.sh
 
-after_script:
-  - scripts/printOutputLogs.sh
