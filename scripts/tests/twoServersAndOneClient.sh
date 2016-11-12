@@ -2,17 +2,17 @@
 
 rm -r logs
 
-FirstServerPID=$(./scripts/runServer.sh :10000)
+FirstServerPID=$(./scripts/runServer.sh 127.0.0.1:10000)
 echo PID: $FirstServerPID.
 
-SecondServerPID=$(./scripts/runServer.sh :10001 :10000)
+SecondServerPID=$(./scripts/runServer.sh 127.0.0.1:10001 127.0.0.1:10000)
 echo PID: $SecondServerPID.
 
-./scripts/runClient.sh :10000 put A 1
+./scripts/runClient.sh 127.0.0.1:10000 put A 1
 
 ExpectedValue='1'
 
-ReceivedValue=$(./scripts/runClient.sh :10001 get A)
+ReceivedValue=$(./scripts/runClient.sh 127.0.0.1:10001 get A)
 
 kill $FirstServerPID $SecondServerPID
 
