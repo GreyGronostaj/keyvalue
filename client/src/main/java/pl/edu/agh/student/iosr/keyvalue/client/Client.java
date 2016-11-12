@@ -73,7 +73,7 @@ public class Client {
         System.out.println("  Available operations:");
         System.out.println("    - get key");
         System.out.println("    - put key value");
-        System.out.println("IP can always be skipped (eg. ':5000' instead of '127.0.0.1:5000')");
+        System.out.println("IP can always be skipped (eg. ':5000' instead of '127.0.0.1:5000').");
         System.exit(1);
     }
 }

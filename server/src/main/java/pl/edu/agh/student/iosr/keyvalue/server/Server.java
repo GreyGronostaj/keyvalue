@@ -35,7 +35,7 @@ public class Server {
         System.out.println("Usage:");
         System.out.println("  Create cluster:   <program> ip:port");
         System.out.println("  Join cluster:     <program> ip:port clusterIp:clusterPort");
-        System.out.println("IP can always be skipped (eg. ':5000' instead of '127.0.0.1:5000')");
+        System.out.println("IP can always be skipped (eg. ':5000' instead of '127.0.0.1:5000').");
         System.exit(1);
     }
 
