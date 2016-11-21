@@ -9,4 +9,5 @@ script:
   - ./gradlew getDeps
   - scripts/collectJars.sh
   - scripts/tests/twoServersAndOneClient.sh
+  - scripts/tests/tenServersKilling.sh
 
