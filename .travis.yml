@@ -4,6 +4,12 @@ jdk:
 
 before_script:
   - chmod u+x scripts/*
+
 script:
   - ./gradlew getDeps
   - scripts/collectJars.sh
+  - scripts/tests/twoServersAndOneClient.sh
+  - scripts/tests/tenServers.sh
+  - scripts/tests/tenServersPutRequestsFirst.sh
+  - scripts/tests/tenServersKilling.sh
+

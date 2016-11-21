@@ -11,7 +11,8 @@ import pl.edu.agh.student.iosr.keyvalue.PutCommand;
 import java.util.HashMap;
 import java.util.Map;
 
-class KeyValueStateMachine extends StateMachine implements Snapshottable {
+@SuppressWarnings("WeakerAccess")
+public class KeyValueStateMachine extends StateMachine implements Snapshottable {
     private Map<Object, Object> map = new HashMap<>();
 
     public Object put(Commit<PutCommand> commit) {
