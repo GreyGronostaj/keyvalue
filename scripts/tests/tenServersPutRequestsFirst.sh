@@ -10,8 +10,6 @@ do
     sleep 2
 done
 
-fails=0
-
 for i in {0..9}
 do
     eval "./scripts/runClient.sh 127.0.0.1:1000$i put n $i &"
@@ -38,7 +36,7 @@ kill ${PIDs[@]}
 
 if [ $fails == 0 ]
 then
-    echo "Test passed."
+    echo "Test passed - all servers returned the same value: $receivedValue."
     exit 0
 fi
 

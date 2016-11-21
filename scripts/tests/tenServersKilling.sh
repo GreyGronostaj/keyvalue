@@ -10,8 +10,7 @@ do
     sleep 2
 done
 
-fails=0
-
+echo "Killing server at 127.0.0.1:10002."
 kill ${PIDs[2]}
 
 for i in {0..9}
@@ -20,10 +19,13 @@ do
     PIDs+=($!)
 done
 
+echo "Killing server at 127.0.0.1:10001."
 kill ${PIDs[1]}
 sleep 2
+echo "Killing server at 127.0.0.1:10003."
 kill ${PIDs[3]}
 sleep 2
+echo "Killing server at 127.0.0.1:10005."
 kill ${PIDs[5]}
 sleep 1
 PIDs[1]=$(./scripts/runServer.sh 127.0.0.1:10001)
@@ -54,7 +56,7 @@ kill ${PIDs[@]}
 
 if [ $fails == 0 ]
 then
-    echo "Test passed."
+    echo "Test passed - all servers returned the same value: $receivedValue."
     exit 0
 fi
 

@@ -14,29 +14,24 @@ fails=0
 
 for i in {0..9}
 do
-    for j in {0..9}
-    do
-        ./scripts/runClient.sh 127.0.0.1:1000$j put $i$j $i$j
+    ./scripts/runClient.sh 127.0.0.1:1000$i put $i $i
 
-        sleep 2
+    sleep 2
 
-        ((n=9-j))
-        ReceivedValue=$(./scripts/runClient.sh 127.0.0.1:1000$n get $i$j)
+    ((n=9-i))
+    ReceivedValue=$(./scripts/runClient.sh 127.0.0.1:1000$n get $i)
 
-        ExpectedValue=$i$j
+    ExpectedValue=$i
 
-        if [ $ReceivedValue != $ExpectedValue ]
-        then
-            echo Expected: $ExpectedValue, received: $ReceivedValue.
-            ((fails++))
-            echo Failed.
-        fi
-    done
+    if [ $ReceivedValue != $ExpectedValue ]
+    then
+        echo Expected: $ExpectedValue, received: $ReceivedValue.
+        ((fails++))
+        echo Failed.
+    fi
 done
 
-kill ${servers[@]}
-
-rm serversPIDs
+kill ${PIDs[@]}
 
 if [ $fails == 0 ]
 then
