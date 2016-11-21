@@ -31,32 +31,22 @@ sleep 4
 PIDs[3]=$(./scripts/runServer.sh 127.0.0.1:10003)
 sleep 2
 PIDs[5]=$(./scripts/runServer.sh 127.0.0.1:10005)
+
 sleep 5
 
 PIDs[2]=$(./scripts/runServer.sh 127.0.0.1:10002)
 
 fails=0
 
-serversWithDifferentValue=-1
+expectedValue=$(./scripts/runClient.sh 127.0.0.1:10000 get n)
 
-expectedValue=$i
-
-lastReceivedValue=none
-
-for i in {0..9}
+for i in {1..9}
 do
     receivedValue=$(./scripts/runClient.sh 127.0.0.1:1000$i get n)
     if [ $receivedValue != $expectedValue ]
     then
         echo Expected: $expectedValue, received: $receivedValue.
         ((fails++))
-
-        if [ $receivedValue != $lastReceivedValue ]
-        then
-            echo Received: $receivedValue, last time received: $lastReceivedValue.
-            ((serversWithDifferentValue++))
-            lastReceivedValue=$receivedValue
-        fi
     fi
 done
 
@@ -65,10 +55,6 @@ kill ${PIDs[@]}
 if [ $fails == 0 ]
 then
     echo "Test passed."
-    exit 0
-elif [ $serversWithDifferentValue == 0 ]
-then
-    echo "Test passed, but value is different from the one that should be set as the last one. Expected: $expectedValue, received: $receivedValue."
     exit 0
 fi
 
